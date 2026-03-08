@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Booking Confirmed — GOKU TRIP{% endblock %}
+
+{% block extra_styles %}
+.success-page {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; padding: 2rem;
+}
+
+.success-inner { max-width: 560px; }
+
+.success-icon {
+  font-size: 3rem; margin-bottom: 2rem;
+  color: var(--gold);
+}
+
+.success-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3rem; font-weight: 300;
+  margin-bottom: 1rem;
+}
+
+.success-msg {
+  font-size: 0.9rem; line-height: 1.8;
+  color: rgba(245,242,236,0.7);
+  margin-bottom: 2rem;
+}
+
+.booking-ref {
+  font-size: 0.75rem; letter-spacing: 0.2em;
+  color: var(--gold); margin-bottom: 2rem;
+}
+{% endblock %}
+
+{% block content %}
+<div class="success-page">
+  <div class="success-inner">
+    <div class="success-icon">✦</div>
+    <h1 class="success-title">You're Booked</h1>
+    <p class="success-msg">
+      Thank you{% if booking %}, {{ booking.customer_name }}{% endif %}!<br>
+      Your reservation is confirmed. A confirmation email is on its way.
+    </p>
+    {% if booking %}
+    <p class="booking-ref">Booking #{{ booking.id }} · {{ booking.tour.name }}</p>
+    {% endif %}
+    <a href="/" class="btn btn-outline">Back to Tours</a>
+  </div>
+</div>
+{% endblock %}

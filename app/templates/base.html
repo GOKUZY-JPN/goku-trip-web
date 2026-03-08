@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}GOKU TRIP - Japan Private Tours{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f2ec;
+      --gold: #c9a84c;
+      --gold-light: #e8d5a3;
+      --red: #8b1a1a;
+      --gray: #6b6b6b;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      padding: 1.5rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.9), transparent);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem; letter-spacing: 0.15em;
+      color: var(--gold); text-decoration: none;
+    }
+
+    .nav-links a {
+      color: var(--white); text-decoration: none;
+      font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;
+      margin-left: 2rem; opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; color: var(--gold); }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-block;
+      padding: 0.9rem 2.5rem;
+      font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase;
+      cursor: pointer; border: none; text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .btn-gold {
+      background: var(--gold); color: var(--black);
+      font-weight: 400;
+    }
+    .btn-gold:hover { background: var(--gold-light); }
+
+    .btn-outline {
+      background: transparent; color: var(--gold);
+      border: 1px solid var(--gold);
+    }
+    .btn-outline:hover { background: var(--gold); color: var(--black); }
+
+    /* FOOTER */
+    footer {
+      padding: 3rem;
+      border-top: 1px solid rgba(201,168,76,0.2);
+      text-align: center;
+      font-size: 0.75rem; letter-spacing: 0.15em;
+      color: var(--gray);
+    }
+
+    {% block extra_styles %}{% endblock %}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="nav-logo">GOKU TRIP</a>
+    <div class="nav-links">
+      <a href="/#tours">Tours</a>
+      <a href="/#about">About</a>
+      <a href="/#contact">Contact</a>
+    </div>
+  </nav>
+
+  {% block content %}{% endblock %}
+
+  <footer>
+    <p>&copy; 2025 GOKU TRIP — Private Tours in Japan</p>
+  </footer>
+</body>
+</html>

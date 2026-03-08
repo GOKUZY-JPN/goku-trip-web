@@ -1,0 +1,337 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ tour.name }} — GOKU TRIP{% endblock %}
+
+{% block extra_styles %}
+.tour-hero {
+  min-height: 60vh;
+  padding: 10rem 3rem 4rem;
+  background: linear-gradient(to bottom, #1a0a0a, var(--black));
+  display: flex; align-items: flex-end;
+  max-width: 1200px; margin: 0 auto;
+}
+
+.tour-hero-label {
+  font-size: 0.7rem; letter-spacing: 0.4em;
+  color: var(--gold); text-transform: uppercase; margin-bottom: 1rem;
+}
+
+.tour-hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  font-weight: 300; line-height: 1.1;
+}
+
+.tour-body {
+  max-width: 1200px; margin: 0 auto;
+  padding: 4rem 3rem;
+  display: grid; grid-template-columns: 1fr 420px; gap: 4rem;
+}
+
+.tour-desc {
+  font-size: 1rem; line-height: 1.9;
+  color: rgba(245,242,236,0.8);
+}
+
+/* BOOKING WIDGET */
+.booking-widget {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(201,168,76,0.25);
+  padding: 2rem;
+  position: sticky; top: 6rem;
+  align-self: start;
+}
+
+.widget-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem; margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(201,168,76,0.2);
+}
+
+.form-group { margin-bottom: 1.5rem; }
+
+.form-label {
+  display: block;
+  font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 0.6rem;
+}
+
+.form-select, .form-input {
+  width: 100%; padding: 0.8rem 1rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(201,168,76,0.2);
+  color: var(--white);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.9rem;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.form-select:focus, .form-input:focus {
+  outline: none; border-color: var(--gold);
+}
+
+option { background: #1a1a1a; }
+
+/* Availability dots */
+.availability-info {
+  font-size: 0.8rem; margin-top: 0.4rem;
+  min-height: 1.2rem;
+}
+
+.spots-good { color: #5cb85c; }
+.spots-low  { color: #f0ad4e; }
+.spots-full { color: var(--red); }
+
+/* Price display */
+.price-display {
+  margin: 1.5rem 0;
+  padding: 1.2rem;
+  background: rgba(201,168,76,0.08);
+  border-left: 2px solid var(--gold);
+}
+
+.price-label {
+  font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gray); margin-bottom: 0.3rem;
+}
+
+.price-amount {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem; color: var(--gold);
+}
+
+.price-breakdown {
+  font-size: 0.75rem; color: var(--gray); margin-top: 0.3rem;
+}
+
+/* Customer info */
+.customer-section {
+  border-top: 1px solid rgba(201,168,76,0.2);
+  padding-top: 1.5rem; margin-top: 1.5rem;
+}
+
+.customer-section-title {
+  font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 1rem;
+}
+
+.btn-book {
+  width: 100%;
+  padding: 1.1rem;
+  background: var(--gold); color: var(--black);
+  font-size: 0.8rem; letter-spacing: 0.25em; text-transform: uppercase;
+  font-weight: 400; border: none; cursor: pointer;
+  transition: background 0.3s;
+  margin-top: 1rem;
+}
+
+.btn-book:hover { background: var(--gold-light); }
+.btn-book:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.error-msg { color: var(--red); font-size: 0.8rem; margin-top: 0.5rem; }
+
+@media (max-width: 768px) {
+  .tour-body { grid-template-columns: 1fr; }
+  .booking-widget { position: static; }
+}
+{% endblock %}
+
+{% block content %}
+<div class="tour-hero">
+  <div>
+    <p class="tour-hero-label">Private Tour · {{ tour.duration_hours }}hrs</p>
+    <h1 class="tour-hero-title">{{ tour.name }}</h1>
+  </div>
+</div>
+
+<div class="tour-body">
+  <!-- LEFT: Description -->
+  <div>
+    <p class="tour-desc">{{ tour.description }}</p>
+  </div>
+
+  <!-- RIGHT: Booking Widget -->
+  <div class="booking-widget">
+    <h2 class="widget-title">Book This Tour</h2>
+
+    <!-- Date -->
+    <div class="form-group">
+      <label class="form-label">Select Date</label>
+      <select class="form-select" id="dateSelect">
+        <option value="">Loading dates...</option>
+      </select>
+      <div class="availability-info" id="availabilityInfo"></div>
+    </div>
+
+    <!-- People -->
+    <div class="form-group">
+      <label class="form-label">Number of People</label>
+      <select class="form-select" id="peopleSelect">
+        {% for i in range(1, 16) %}
+        <option value="{{ i }}">{{ i }} person{% if i > 1 %}s{% endif %}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    {% if options %}
+    <!-- Option -->
+    <div class="form-group">
+      <label class="form-label">Tour Option</label>
+      <select class="form-select" id="optionSelect">
+        <option value="">No option</option>
+        {% for opt in options %}
+        <option value="{{ opt.id }}">{{ opt.name }}{% if opt.description %} — {{ opt.description }}{% endif %}</option>
+        {% endfor %}
+      </select>
+    </div>
+    {% endif %}
+
+    <!-- Price -->
+    <div class="price-display" id="priceDisplay" style="display:none">
+      <div class="price-label">Total Price</div>
+      <div class="price-amount" id="priceAmount">¥0</div>
+      <div class="price-breakdown" id="priceBreakdown"></div>
+    </div>
+
+    <!-- Customer Info -->
+    <div class="customer-section">
+      <div class="customer-section-title">Your Information</div>
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-input" id="customerName" placeholder="John Smith">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="customerEmail" placeholder="john@example.com">
+      </div>
+    </div>
+
+    <div class="error-msg" id="errorMsg"></div>
+    <button class="btn-book" id="bookBtn" disabled>Proceed to Payment</button>
+  </div>
+</div>
+
+<script>
+const TOUR_ID = {{ tour.id }};
+let schedules = [];
+let currentPrice = 0;
+let currentPricePer = 0;
+
+// --- Load availability ---
+async function loadAvailability() {
+  const res = await fetch(`/api/availability/${TOUR_ID}`);
+  schedules = await res.json();
+
+  const select = document.getElementById('dateSelect');
+  select.innerHTML = '<option value="">Select a date</option>';
+
+  schedules.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s.schedule_id;
+    opt.dataset.available = s.available;
+    opt.textContent = `${s.date}  ${s.start_time || ''}  (${s.available} spots)`;
+    if (s.available === 0) { opt.disabled = true; opt.textContent += ' — FULL'; }
+    select.appendChild(opt);
+  });
+}
+
+// --- Update availability info ---
+function updateAvailabilityInfo() {
+  const sel = document.getElementById('dateSelect');
+  const info = document.getElementById('availabilityInfo');
+  const selected = sel.options[sel.selectedIndex];
+  if (!selected || !selected.dataset.available) { info.textContent = ''; return; }
+  const spots = parseInt(selected.dataset.available);
+  if (spots === 0) {
+    info.className = 'availability-info spots-full'; info.textContent = 'Fully booked';
+  } else if (spots <= 3) {
+    info.className = 'availability-info spots-low'; info.textContent = `Only ${spots} spots left!`;
+  } else {
+    info.className = 'availability-info spots-good'; info.textContent = `${spots} spots available`;
+  }
+}
+
+// --- Calculate price ---
+async function calcPrice() {
+  const numPeople = parseInt(document.getElementById('peopleSelect').value);
+  const optionEl = document.getElementById('optionSelect');
+  const optionId = optionEl ? optionEl.value : '';
+
+  let url = `/api/price?tour_id=${TOUR_ID}&num_people=${numPeople}`;
+  if (optionId) url += `&option_id=${optionId}`;
+
+  const res = await fetch(url);
+  if (!res.ok) {
+    document.getElementById('priceDisplay').style.display = 'none';
+    currentPrice = 0; updateBookBtn(); return;
+  }
+  const data = await res.json();
+  currentPrice = data.total;
+  currentPricePer = data.price_per_person;
+
+  document.getElementById('priceAmount').textContent = `¥${currentPrice.toLocaleString()}`;
+  document.getElementById('priceBreakdown').textContent = `¥${currentPricePer.toLocaleString()} × ${numPeople} person${numPeople>1?'s':''}`;
+  document.getElementById('priceDisplay').style.display = 'block';
+  updateBookBtn();
+}
+
+function updateBookBtn() {
+  const dateOk = document.getElementById('dateSelect').value !== '';
+  const priceOk = currentPrice > 0;
+  const nameOk  = document.getElementById('customerName').value.trim() !== '';
+  const emailOk = document.getElementById('customerEmail').value.trim() !== '';
+  document.getElementById('bookBtn').disabled = !(dateOk && priceOk && nameOk && emailOk);
+}
+
+// --- Book ---
+document.getElementById('bookBtn').addEventListener('click', async () => {
+  document.getElementById('errorMsg').textContent = '';
+  const scheduleId = document.getElementById('dateSelect').value;
+  const numPeople  = parseInt(document.getElementById('peopleSelect').value);
+  const optionEl   = document.getElementById('optionSelect');
+  const optionId   = optionEl ? optionEl.value : null;
+  const name       = document.getElementById('customerName').value.trim();
+  const email      = document.getElementById('customerEmail').value.trim();
+
+  const btn = document.getElementById('bookBtn');
+  btn.disabled = true; btn.textContent = 'Processing...';
+
+  const res = await fetch('/booking/checkout', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      tour_id: TOUR_ID,
+      schedule_id: scheduleId ? parseInt(scheduleId) : null,
+      option_id: optionId ? parseInt(optionId) : null,
+      num_people: numPeople,
+      customer_name: name,
+      customer_email: email,
+      total_price: currentPrice
+    })
+  });
+
+  const data = await res.json();
+  if (data.checkout_url) {
+    window.location.href = data.checkout_url;
+  } else {
+    document.getElementById('errorMsg').textContent = data.error || 'Something went wrong.';
+    btn.disabled = false; btn.textContent = 'Proceed to Payment';
+  }
+});
+
+// Event listeners
+document.getElementById('dateSelect').addEventListener('change', () => { updateAvailabilityInfo(); updateBookBtn(); });
+document.getElementById('peopleSelect').addEventListener('change', calcPrice);
+const optEl = document.getElementById('optionSelect');
+if (optEl) optEl.addEventListener('change', calcPrice);
+document.getElementById('customerName').addEventListener('input', updateBookBtn);
+document.getElementById('customerEmail').addEventListener('input', updateBookBtn);
+
+// Init
+loadAvailability();
+calcPrice();
+</script>
+{% endblock %}
