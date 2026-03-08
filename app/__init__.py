@@ -24,7 +24,9 @@ def create_app():
 
     from .routes.public import public_bp
     from .routes.booking import booking_bp
+    from .routes.admin import admin_bp
     app.register_blueprint(public_bp)
-    app.register_blueprint(booking_bp, url_prefix='/booking')
+    app.register_blueprint(booking_bp, url_prefix="/booking")
+    app.register_blueprint(admin_bp)
 
     return app
