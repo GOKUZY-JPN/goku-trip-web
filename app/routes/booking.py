@@ -1,20 +1,17 @@
 from flask import Blueprint, request, jsonify, render_template
 from ..models.models import Booking, TourSchedule, Tour
 from .. import db
-import stripe
 import os
 
 booking_bp = Blueprint('booking', __name__)
-
-def get_stripe():
-    stripe.api_key = os.environ.get('STRIPE_SECRET_KEY')
-    return stripe
 
 YOUR_DOMAIN = lambda: os.environ.get('YOUR_DOMAIN', 'http://localhost:5000')
 
 @booking_bp.route('/checkout', methods=['POST'])
 def create_checkout():
-    s = get_stripe()
+    import stripe
+    stripe.api_key = os.environ.get('STRIPE_SECRET_KEY')
+
     data = request.get_json()
     tour_id = data.get('tour_id')
     schedule_id = data.get('schedule_id')
@@ -30,7 +27,7 @@ def create_checkout():
     if schedule and schedule.available_spots < num_people:
         return jsonify({'error': 'Not enough availability'}), 400
 
-    session = s.checkout.Session.create(
+    session = stripe.checkout.Session.create(
         payment_method_types=['card'],
         line_items=[{
             'price_data': {
@@ -81,6 +78,8 @@ def success():
 
 @booking_bp.route('/webhook', methods=['POST'])
 def webhook():
+    import stripe
+    stripe.api_key = os.environ.get('STRIPE_SECRET_KEY')
     payload = request.data
     sig_header = request.headers.get('Stripe-Signature')
     WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
