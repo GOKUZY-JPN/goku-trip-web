@@ -10,6 +10,7 @@ class Tour(db.Model):
     duration_hours = db.Column(db.Float)
     max_capacity = db.Column(db.Integer, default=10)
     image_url = db.Column(db.String(500))
+    area = db.Column(db.String(50), default="kyoto")  # kyoto/osaka/nara/kanazawa/himeji/other
     is_active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 

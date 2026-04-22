@@ -2,160 +2,194 @@
 
 {% block extra_styles %}
 .hero {
-  height: 100vh;
-  display: flex; align-items: center; justify-content: center;
+  padding: 8rem 3rem 4rem;
   text-align: center;
   background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 50%, #0a0a0a 100%);
   position: relative; overflow: hidden;
 }
-
 .hero::before {
-  content: '悟';
-  position: absolute;
-  font-size: 40vw;
+  content: '旅';
+  position: absolute; font-size: 40vw;
   color: rgba(201,168,76,0.04);
-  font-family: 'Noto Sans JP', sans-serif;
-  pointer-events: none;
-  line-height: 1;
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+  pointer-events: none; line-height: 1;
 }
-
 .hero-inner { position: relative; z-index: 1; }
-
-.hero-subtitle {
-  font-size: 0.75rem; letter-spacing: 0.4em; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 1.5rem;
-}
-
-.hero-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(3rem, 8vw, 7rem);
-  font-weight: 300; line-height: 1.1;
-  margin-bottom: 2rem;
-}
-
+.hero-subtitle { font-size: 0.75rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+.hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 300; line-height: 1.1; margin-bottom: 2.5rem; }
 .hero-title em { font-style: italic; color: var(--gold); }
 
-.hero-desc {
-  max-width: 500px; margin: 0 auto 3rem;
-  font-size: 0.95rem; line-height: 1.8;
-  color: rgba(245,242,236,0.7);
+/* SEARCH */
+.search-bar {
+  max-width: 600px; margin: 0 auto 2rem;
+  display: flex; gap: 0;
+  border: 1px solid rgba(201,168,76,0.4);
+}
+.search-bar input {
+  flex: 1; padding: 1rem 1.5rem;
+  background: rgba(255,255,255,0.05);
+  border: none; color: var(--white);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.9rem;
+}
+.search-bar input::placeholder { color: rgba(245,242,236,0.4); }
+.search-bar input:focus { outline: none; }
+.search-bar button {
+  padding: 1rem 2rem;
+  background: var(--gold); color: var(--black);
+  border: none; cursor: pointer;
+  font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;
+  font-weight: 400; transition: background 0.2s;
+}
+.search-bar button:hover { background: var(--gold-light); }
+
+/* AREA FILTERS */
+.area-filters {
+  display: flex; gap: 0.8rem; justify-content: center;
+  flex-wrap: wrap; margin-bottom: 0;
+}
+.area-btn {
+  padding: 0.5rem 1.2rem;
+  border: 1px solid rgba(201,168,76,0.3);
+  background: transparent; color: rgba(245,242,236,0.7);
+  font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+  cursor: pointer; transition: all 0.2s;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+.area-btn:hover, .area-btn.active {
+  background: var(--gold); color: var(--black);
+  border-color: var(--gold);
 }
 
 /* TOURS SECTION */
-#tours {
-  padding: 6rem 3rem;
-  max-width: 1200px; margin: 0 auto;
-}
-
-.section-label {
-  font-size: 0.7rem; letter-spacing: 0.4em; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 1rem;
-}
-
-.section-title {
+.tours-section { padding: 4rem 3rem; max-width: 1200px; margin: 0 auto; }
+.area-section { margin-bottom: 4rem; }
+.area-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2rem, 4vw, 3.5rem);
-  font-weight: 300; margin-bottom: 4rem;
+  font-size: 2rem; font-weight: 300;
+  margin-bottom: 0.3rem;
 }
+.area-label { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
+.tours-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
 
-.tours-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 2rem;
-}
+.tour-card { border: 1px solid rgba(201,168,76,0.2); overflow: hidden; transition: border-color 0.3s, transform 0.3s; cursor: pointer; text-decoration: none; color: inherit; display: block; }
+.tour-card:hover { border-color: var(--gold); transform: translateY(-3px); }
+.tour-card-img { height: 180px; background: linear-gradient(135deg, #1a0f0f, #0f0f1a); display: flex; align-items: center; justify-content: center; font-size: 3rem; overflow: hidden; }
+.tour-card-img img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+.tour-card-body { padding: 1.2rem; }
+.tour-card-area { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
+.tour-card-name { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; margin-bottom: 0.4rem; line-height: 1.3; }
+.tour-card-desc { font-size: 0.8rem; line-height: 1.6; color: rgba(245,242,236,0.6); margin-bottom: 1rem; }
+.tour-card-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--gold); }
 
-.tour-card {
-  border: 1px solid rgba(201,168,76,0.2);
-  overflow: hidden;
-  transition: border-color 0.3s, transform 0.3s;
-  cursor: pointer;
-}
-
-.tour-card:hover {
-  border-color: var(--gold);
-  transform: translateY(-4px);
-}
-
-.tour-card-img {
-  height: 220px;
-  background: linear-gradient(135deg, #1a0f0f, #0f0f1a);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 4rem;
-  overflow: hidden;
-}
-
-.tour-card-img img {
-  width: 100%; height: 100%; object-fit: cover;
-  opacity: 0.8;
-}
-
-.tour-card-body { padding: 1.5rem; }
-
-.tour-card-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.5rem; margin-bottom: 0.5rem;
-}
-
-.tour-card-desc {
-  font-size: 0.85rem; line-height: 1.7;
-  color: rgba(245,242,236,0.6);
-  margin-bottom: 1.2rem;
-}
-
-.tour-card-meta {
-  display: flex; justify-content: space-between; align-items: center;
-  font-size: 0.75rem; color: var(--gold);
-  letter-spacing: 0.1em;
-}
-
-.empty-state {
-  text-align: center; padding: 4rem;
-  color: var(--gray); font-style: italic;
-}
+.no-results { text-align: center; padding: 3rem; color: var(--gray); font-style: italic; }
 {% endblock %}
 
 {% block content %}
 <section class="hero">
   <div class="hero-inner">
     <p class="hero-subtitle">Private Japan Tours</p>
-    <h1 class="hero-title">Experience<br><em>Real Japan</em></h1>
-    <p class="hero-desc">Handcrafted tours led by passionate local guides. Kyoto, Osaka, Nara, and beyond.</p>
-    <a href="#tours" class="btn btn-gold">Explore Tours</a>
+    <h1 class="hero-title">Experience <em>Real Japan</em></h1>
+
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search tours by destination or keyword...">
+      <button onclick="filterTours()">Search</button>
+    </div>
+
+    <div class="area-filters">
+      <button class="area-btn active" onclick="setArea('all', this)">All</button>
+      <button class="area-btn" onclick="setArea('kyoto', this)">Kyoto</button>
+      <button class="area-btn" onclick="setArea('osaka', this)">Osaka</button>
+      <button class="area-btn" onclick="setArea('nara', this)">Nara</button>
+      <button class="area-btn" onclick="setArea('kanazawa', this)">Kanazawa</button>
+      <button class="area-btn" onclick="setArea('himeji', this)">Himeji</button>
+      <button class="area-btn" onclick="setArea('uji', this)">Uji</button>
+      <button class="area-btn" onclick="setArea('other', this)">Other</button>
+    </div>
   </div>
 </section>
 
-<section id="tours">
-  <p class="section-label">Our Experiences</p>
-  <h2 class="section-title">Private Tours</h2>
+<div class="tours-section" id="toursContainer">
+  {% set areas = [
+    ('kyoto', 'Kyoto', '京都'),
+    ('osaka', 'Osaka', '大阪'),
+    ('nara', 'Nara', '奈良'),
+    ('kanazawa', 'Kanazawa', '金沢'),
+    ('himeji', 'Himeji', '姫路'),
+    ('uji', 'Uji', '宇治'),
+    ('other', 'Other Areas', 'その他'),
+  ] %}
 
-  {% if tours %}
-  <div class="tours-grid">
-    {% for tour in tours %}
-    <a href="/tours/{{ tour.id }}" style="text-decoration:none;color:inherit;">
-      <div class="tour-card">
-        <div class="tour-card-img">
-          {% if tour.image_url %}
-            <img src="{{ tour.image_url }}" alt="{{ tour.name }}">
-          {% else %}
-            🏯
-          {% endif %}
-        </div>
-        <div class="tour-card-body">
-          <h3 class="tour-card-name">{{ tour.name }}</h3>
-          <p class="tour-card-desc">{{ tour.description[:120] }}{% if tour.description|length > 120 %}...{% endif %}</p>
-          <div class="tour-card-meta">
-            <span>{{ tour.duration_hours }}hrs</span>
-            <span>Book Now →</span>
+  {% for area_key, area_en, area_jp in areas %}
+    {% set area_tours = tours | selectattr('area', 'equalto', area_key) | list %}
+    {% if area_tours %}
+    <div class="area-section" data-area="{{ area_key }}">
+      <p class="area-label">{{ area_jp }}</p>
+      <h2 class="area-title">{{ area_en }}</h2>
+      <div class="tours-grid">
+        {% for tour in area_tours %}
+        <a href="/tours/{{ tour.id }}" class="tour-card" data-name="{{ tour.name | lower }}" data-desc="{{ tour.description | lower }}">
+          <div class="tour-card-img">
+            {% if tour.image_url %}<img src="{{ tour.image_url }}" alt="{{ tour.name }}">
+            {% else %}🏯{% endif %}
           </div>
-        </div>
+          <div class="tour-card-body">
+            <p class="tour-card-area">{{ area_en }} · {{ tour.duration_hours }}hrs</p>
+            <h3 class="tour-card-name">{{ tour.name }}</h3>
+            <p class="tour-card-desc">{{ tour.description[:100] }}...</p>
+            <div class="tour-card-meta">
+              <span>From ¥{{ "{:,}".format(tour.options[0].pricing[0].price_per_person if tour.options and tour.options[0].pricing else 0) }}/person</span>
+              <span>Book →</span>
+            </div>
+          </div>
+        </a>
+        {% endfor %}
       </div>
-    </a>
-    {% endfor %}
-  </div>
-  {% else %}
-  <div class="empty-state">
-    <p>Tours coming soon.</p>
-  </div>
-  {% endif %}
-</section>
+    </div>
+    {% endif %}
+  {% endfor %}
+
+  <div class="no-results" id="noResults" style="display:none">No tours found.</div>
+</div>
+
+<script>
+let currentArea = 'all';
+
+function setArea(area, btn) {
+  currentArea = area;
+  document.querySelectorAll('.area-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterTours();
+}
+
+function filterTours() {
+  const query = document.getElementById('searchInput').value.toLowerCase();
+  const sections = document.querySelectorAll('.area-section');
+  let anyVisible = false;
+
+  sections.forEach(section => {
+    const sectionArea = section.dataset.area;
+    const areaMatch = currentArea === 'all' || currentArea === sectionArea;
+
+    if (!areaMatch) { section.style.display = 'none'; return; }
+
+    const cards = section.querySelectorAll('.tour-card');
+    let sectionHasVisible = false;
+    cards.forEach(card => {
+      const nameMatch = card.dataset.name.includes(query);
+      const descMatch = card.dataset.desc.includes(query);
+      const show = nameMatch || descMatch;
+      card.style.display = show ? 'block' : 'none';
+      if (show) sectionHasVisible = true;
+    });
+
+    section.style.display = sectionHasVisible ? 'block' : 'none';
+    if (sectionHasVisible) anyVisible = true;
+  });
+
+  document.getElementById('noResults').style.display = anyVisible ? 'none' : 'block';
+}
+
+document.getElementById('searchInput').addEventListener('input', filterTours);
+</script>
 {% endblock %}
