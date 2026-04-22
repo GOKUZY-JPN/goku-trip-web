@@ -11,6 +11,7 @@ class Tour(db.Model):
     max_capacity = db.Column(db.Integer, default=10)
     image_url = db.Column(db.String(500))
     area = db.Column(db.String(50), default="kyoto")  # kyoto/osaka/nara/kanazawa/himeji/other
+    area = db.Column(db.String(50), default="kyoto")
     is_active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -24,6 +25,7 @@ class TourOption(db.Model):
     tour_id = db.Column(db.Integer, db.ForeignKey('tours.id'), nullable=False)
     name = db.Column(db.String(100), nullable=False)   # e.g. "昼食あり", "昼食なし"
     description = db.Column(db.String(300))
+    area = db.Column(db.String(50), default="kyoto")
     is_active = db.Column(db.Boolean, default=True)
 
     pricing = db.relationship('TourPricing', backref='option', lazy=True)
@@ -95,6 +97,7 @@ class Guide(db.Model):
     name = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(200))
     languages = db.Column(db.String(200))  # "ja,en,es"
+    area = db.Column(db.String(50), default="kyoto")
     is_active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
