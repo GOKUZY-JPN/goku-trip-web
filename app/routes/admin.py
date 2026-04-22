@@ -117,3 +117,50 @@ def list_tours():
         return jsonify({'error': 'Unauthorized'}), 401
     tours = Tour.query.all()
     return jsonify([{'id': t.id, 'name': t.name, 'area': t.area} for t in tours])
+
+
+@admin_bp.route('/admin/tours_detail')
+def tours_detail():
+    if not check_auth(request):
+        return jsonify({'error': 'Unauthorized'}), 401
+    tours = Tour.query.all()
+    result = []
+    for t in tours:
+        price = None
+        if t.options and t.options[0].pricing:
+            price = t.options[0].pricing[0].price_per_person
+        result.append({
+            'id': t.id, 'name': t.name, 'area': t.area,
+            'duration_hours': t.duration_hours,
+            'description': t.description,
+            'image_url': t.image_url,
+            'price_per_person': price
+        })
+    return jsonify(result)
+
+
+@admin_bp.route('/admin/tour/<int:tour_id>', methods=['POST'])
+def update_tour(tour_id):
+    if not check_auth(request):
+        return jsonify({'error': 'Unauthorized'}), 401
+    data = request.get_json()
+    tour = Tour.query.get_or_404(tour_id)
+    tour.name = data.get('name', tour.name)
+    tour.area = data.get('area', tour.area)
+    tour.duration_hours = data.get('duration_hours', tour.duration_hours)
+    tour.description = data.get('description', tour.description)
+    tour.image_url = data.get('image_url', tour.image_url)
+
+    if data.get('price_per_person') and tour.options and tour.options[0].pricing:
+        tour.options[0].pricing[0].price_per_person = data['price_per_person']
+
+    db.session.commit()
+    return jsonify({'success': True})
+
+
+@admin_bp.route('/admin')
+def admin_index():
+    if not check_auth(request):
+        return jsonify({'error': 'Unauthorized'}), 401
+    from flask import render_template
+    return render_template('admin_tours.html')
